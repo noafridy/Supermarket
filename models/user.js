@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true); // need for create PK
 var Schema = mongoose.Schema;
 
-const User = mongoose.model('User', new Schema({
+var userSchema = new Schema({
     firslName: String,
-    lastNAme: String,
-    username: String,
-    ID: Number,   // need to be PK
+    lastName: String,
+    username: String,  //mail
+    ID: Number, // need to be PK
     passwored: String,
     city: String,
     street: String,
     rol:String
-}))
+});
+// userSchema.index({ID:1,type: -1 });
+
+const User = mongoose.model('User', userSchema)
 
 module.exports = User;   
