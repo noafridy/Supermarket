@@ -7,7 +7,7 @@ var userSchema = new Schema({
     lastName: String,
     username: String,  //mail
     ID: Number, // need to be PK
-    passwored: String,
+    password: String,
     city: String,
     street: String,
     rol:String

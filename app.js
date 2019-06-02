@@ -1,44 +1,65 @@
 var express = require('express');
+// var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose'); //שלב2
-const passport = require('./passport/local');
-const session = require("express-session");
+const passport = require('./passport/local'); //ספרייה של פספורט עם אסטרטגיה לוקל
+const session = require("express-session");  //session גורם למשתמש להיות מחובר
 const bodyParser = require("body-parser");
 
 
 //  שלב1
 var userRoutes = require('./routes/userRoutes');
-// var shoppingCartRoutes = require('./routes/userRoutes');   
-// var userRoutes = require('./routes/userRoutes');   
-// var userRoutes = require('./routes/userRoutes');   
-// var userRoutes = require('./routes/userRoutes');   
-// var userRoutes = require('./routes/userRoutes');   
+var productRouts = require('./routes/productRoutes');
 
 var app = express();
 mongoose.connect('mongodb://localhost:27017/supermarket', { useNewUrlParser: true }) //שלב2  חיבור לדאטהבייס //collections
 
+// var allowedOrigins = ['http://localhost:4200','http://localhost:3000'];
+
+ //middleware
 app.use(logger('dev'));
 app.use(express.json());
+// app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'keyboard cat' }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(session({ //middleware ->app.use is when we use middleware
+    secret: 'noasoftwerdeveloper',
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());  //איתחול פספורט
+app.use(passport.session());   //כדי שיוכל להשתמש
 
-app.all('/*', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Headers", "content-type");
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    next();
-});
+// app.use(cors({
+//     credentials: true,
+//     origin: function(origin, callback){
+//       // allow requests with no origin 
+//       // (like mobile apps or curl requests)
+//       debugger;
+//       if(!origin) return callback(null, true);
+//       if(allowedOrigins.indexOf(origin) === -1){
+//         var msg = 'The CORS policy for this site does not ' +
+//                   'allow access from the specified Origin.';
+//         return callback(new Error(msg), false);
+//       }
+//       return callback(null, true);
+//     }
+//   }));
+
+// app.all('/*', function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.header("Access-Control-Allow-Headers", "content-type");
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     next();
+// });
 
 app.use('/api/user', userRoutes);   //  שלב1
-
+app.use('/api/product' , productRouts);
 
 module.exports = app;

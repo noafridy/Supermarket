@@ -1,6 +1,7 @@
+//Strategy
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-var UserModal = require('../models/user');
+var UserModal = require('../models/user');  //אני מחפשת את המשתמש בדאטה בייס 
 
 
 passport.use(new LocalStrategy(
@@ -10,7 +11,7 @@ passport.use(new LocalStrategy(
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
             }
-            if (user.passwored !== password) { // todo: fix passwored to password and clean all users in database
+            if (user.password !== password) { // todo: fix passwored to password and clean all users in database
                 return done(null, false, { message: 'Incorrect password.' });
             }
             return done(null, user);
@@ -24,7 +25,6 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    debugger;
     UserModal.findById(id, function (err, user) {
         done(err, user);
     });
