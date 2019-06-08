@@ -4,6 +4,7 @@ var router = express.Router();
 var CategoryModel = require('../models/category'); 
 var productModule = require('../modules/product.modules');
 
+//get all productModule
 router.get('/', async (req, res, next) => {
     try {
         const result = await productModule.getAll();
@@ -16,10 +17,33 @@ router.get('/', async (req, res, next) => {
 // add new product
 router.post('/', async (req, res, next) => {
     try {
-        let user = await productModule.addNew(req.body);
-        res.json(user);
+        let product = await productModule.addNewPorduct(req.body);
+        res.json(product);
         // res.json({ data: user });
     } catch (e) {
+        res.status(404).send("Erorr : " + e);
+    }
+});
+
+//get products by category name
+router.get('/:categoryName', async (req, res, next) => {
+    try {
+        const categoryName = req.params.categoryName;
+        const result = await productModule.getPorductByCategory(categoryName);
+        res.send(result);
+       
+    } catch (e) {    //e its erorr
+        res.status(404).send("Erorr : " + e);
+    }
+});
+
+//get product by id
+router.get('/', async (req, res, next) => {
+    try {
+        const id = req._id;
+        const result = await productModule.getPorductById(id);
+        res.send(result);
+    } catch (e) {    //e its erorr
         res.status(404).send("Erorr : " + e);
     }
 });

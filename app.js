@@ -16,7 +16,6 @@ var productRouts = require('./routes/productRoutes');
 var app = express();
 mongoose.connect('mongodb://localhost:27017/supermarket', { useNewUrlParser: true }) //שלב2  חיבור לדאטהבייס //collections
 
-// var allowedOrigins = ['http://localhost:4200','http://localhost:3000'];
 
  //middleware
 app.use(logger('dev'));
@@ -33,31 +32,6 @@ app.use(session({ //middleware ->app.use is when we use middleware
 }));
 app.use(passport.initialize());  //איתחול פספורט
 app.use(passport.session());   //כדי שיוכל להשתמש
-
-// app.use(cors({
-//     credentials: true,
-//     origin: function(origin, callback){
-//       // allow requests with no origin 
-//       // (like mobile apps or curl requests)
-//       debugger;
-//       if(!origin) return callback(null, true);
-//       if(allowedOrigins.indexOf(origin) === -1){
-//         var msg = 'The CORS policy for this site does not ' +
-//                   'allow access from the specified Origin.';
-//         return callback(new Error(msg), false);
-//       }
-//       return callback(null, true);
-//     }
-//   }));
-
-// app.all('/*', function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     res.header("Access-Control-Allow-Credentials", "true");
-//     res.header("Access-Control-Allow-Headers", "content-type");
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     next();
-// });
 
 app.use('/api/user', userRoutes);   //  שלב1
 app.use('/api/product' , productRouts);

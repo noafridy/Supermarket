@@ -4,12 +4,6 @@ var router = express.Router();
 var userModule = require('../modules/user.modules');
 const passport = require('../passport/local');
 
-// var shoppingCartModel = require('../models/user');
-// var ProductModel = require('../models/user');  
-// var OrderModel = require('../models/user');  
-// var ItemModel = require('../models/user');  
-// var CategoryModel = require('../models/user'); 
-
 
 router.get('/', async (req, res, next) => {
   try {
@@ -20,58 +14,70 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// add new user
-router.post('/', async (req, res, next) => {
+router.post('/login', function (req, res, next) {  //function עוטפת
   try {
-    let user = await userModule.addNew(req.body);
-    res.json(user);
-    // res.json({ data: user });
-  } catch (e) {
+    passport.authenticate('local', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
+      if (err) { return next(err); }
+      if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
+      req.logIn(user, function (err) {
+        if (err) { return next(err); }
+        res.cookie('userInfo', req.user._id, { maxAge: 900000, httpOnly: true });  //מכניסים לקוקי את האנפרומציה של היוזר
+        return res.status(200).send({
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          role: req.user.role,
+          street: req.user.street,
+          city: req.user.city
+        });
+      });
+    })(req, res, next);
+  } catch (e) {    //e its erorr
     res.status(404).send("Erorr : " + e);
   }
 });
 
-//login
-// router.post('/login',
-//   passport.authenticate('local'),  
-//   function (req, res) {  //אפשר לשרשר דברים שהוא יעשה בעזרת פיסיק
-
-//     if (req.user) {  //בודק האם קיים יוזר בבקשה
-//       // login success
-//       // If this function gets called, authentication was successful.
-//       // `req.user` contains the authenticated user.
-
-//       // TODO change this address to the production one
-//       res.status(200).send(req.user);      //redirect ניווט למסך אחר במקרה זה ניווט למסך יוזר'
-//     } else {
-//       res.status(200).send('error');
-//     }
-//   });
-
-
-router.post('/login', function (req, res, next) {  //function עוטפת
-  passport.authenticate('local', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
-    if (err) { return next(err); }
-    if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
-    req.logIn(user, function (err) {
+// add new user
+router.post('/join', function (req, res, next) {  //function עוטפת
+  try {
+    passport.authenticate('local-signup', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
       if (err) { return next(err); }
-      res.cookie('userInfo', req.user._id, { maxAge: 900000, httpOnly: true });  //מכניסים לקוקי את האנפרומציה של היוזר
-      return res.status(200).send({
-        firstName: req.user.firslName,
-        lastName: req.user.lastName,
-        rol: req.user.rol,
-        street: req.user.street,
-        city: req.user.city
+      if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
+      req.logIn(user, function (err) {
+        if (err) { return next(err); }
+        res.cookie('userInfo', req.user._id, { maxAge: 900000, httpOnly: true });  //מכניסים לקוקי את האנפרומציה של היוזר
+        return res.status(200).send({
+          firstName: req.user.firstName,
+          username: req.user.username,
+          lastName: req.user.lastName,
+          role: req.user.role,
+          street: req.user.street,
+          city: req.user.city
+        });
       });
-    });
-  })(req, res, next);
+    })(req, res, next);
+  } catch (e) {    //e its erorr
+    res.status(404).send("Erorr : " + e);
+  }
 });
-
 
 router.post('/logout', async (req, res, next) => {
-    debugger;
+  try {
     res.cookie('userInfo', null, { maxAge: 900000, httpOnly: true });  //מכניסים לקוקי את האנפרומציה של היוזר
-    return res.status(200).send({message: 'success'});
+    return res.status(200).send({ message: 'success' });
+  } catch (e) {    //e its erorr
+    res.status(404).send("Erorr : " + e);
+  }
 });
+
+//update user role=admin
+router.put('/', async (req, res, next) => {
+  try {
+    userModule.updateRole(req.body.id,req.body.role);
+    return res.status(200).send({ message: 'success' });
+  } catch (e) {    //e its erorr
+    res.status(404).send("Erorr : " + e);
+  }
+})
+
 
 module.exports = router;
