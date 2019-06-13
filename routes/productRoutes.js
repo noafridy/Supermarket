@@ -4,6 +4,16 @@ var router = express.Router();
 var CategoryModel = require('../models/category'); 
 var productModule = require('../modules/product.modules');
 
+//get all CategoryModel
+router.get('/category', async (req, res, next) => {
+    try {
+        const result = await productModule.getAllCategory();
+        res.send(result);
+    } catch (e) {    //e its erorr
+        res.status(404).send("Erorr : " + e);
+    }
+});
+
 //get all productModule
 router.get('/', async (req, res, next) => {
     try {
@@ -37,16 +47,29 @@ router.get('/:categoryName', async (req, res, next) => {
     }
 });
 
-//get product by id
-router.get('/', async (req, res, next) => {
+//get products by product name
+router.get('/name/:productName', async (req, res, next) => {
     try {
-        const id = req._id;
-        const result = await productModule.getPorductById(id);
+        debugger
+        const productName = req.params.productName;
+        const result = await productModule.getPorductByPorductName(productName);
         res.send(result);
+       
     } catch (e) {    //e its erorr
         res.status(404).send("Erorr : " + e);
     }
 });
+
+//get product by id
+// router.get('/', async (req, res, next) => {
+//     try {
+//         const id = req._id;
+//         const result = await productModule.getPorductById(id);
+//         res.send(result);
+//     } catch (e) {    //e its erorr
+//         res.status(404).send("Erorr : " + e);
+//     }
+// });
 
 //add Category data
 router.get('/addCategory', async function (req, res, next) {
