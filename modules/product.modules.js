@@ -11,14 +11,14 @@ var productModel = {
             return newObj;
         });
     },
-    getAllCategory(){
+    getAllCategory() {
         return CategoryModel.find();
     },
     getPorductById: function (id) {
         return ProductModel.findById(id);
     },
     getPorductByCategory: async function (categoryName) {
-        const res =  await ProductModel.find().populate({path: 'category', match: {categoryName: categoryName}}).exec().then(newObj => {
+        const res = await ProductModel.find().populate({ path: 'category', match: { categoryName: categoryName } }).exec().then(newObj => {
             return newObj;
         });
         return res.filter(item => {
@@ -26,24 +26,28 @@ var productModel = {
         })
 
     },
-    getPorductByPorductName: async function (porductName){
-        var find = async function(porductName, done) {
-
-            var query =await ProductModel.find( {name: porductName})
-                query.exec(function (err, data) {
-                 if(err) return done(err)
-                return done(null,data);     
-                }); 
-             }
-             return find;
+    getPorductByPorductName: async function (porductName) {
+        const res = await ProductModel.find({ ProductName: porductName }).populate({ path: 'category' }).exec().then(newObj => {
+            return newObj;
+        });
+        return res;
+    },
+    getPorductByID: async function (ID) {
+        const res = await ProductModel.find({ _id: ID }).populate({ path: 'category' }).exec().then(newObj => {
+            return newObj;
+        });
+        return res;
+    },
+    updateProduct: async function (newProduct) {
+        debugger
+        let product = await ProductModel.findByIdAndUpdate({ _id: newProduct._id}, newProduct);
+        debugger;
+        return product
+        // let product = await ProductModel.findById(newProduct._id);
+        // product.porductName = newProduct.porductName;
+        // return product.save();  
     }
-    // getPorductByPorductName: async function (porductName) {
-    //     const id = await ProductModel.findOne({'porductName':porductName}).then(newObj => {
-    //         return newObj;
-    //     });
-    //     return  ProductModel.findById(id); 
-    //       //ask taltal how to changed to getPorductById the function
-    // }
+
 
 }
 

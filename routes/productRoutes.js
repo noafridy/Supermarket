@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 //שלב 4- יוצרת משתנה למודל כדי שאשתמש בו
-var CategoryModel = require('../models/category'); 
+var CategoryModel = require('../models/category');
 var productModule = require('../modules/product.modules');
 
 //get all CategoryModel
@@ -41,7 +41,7 @@ router.get('/:categoryName', async (req, res, next) => {
         const categoryName = req.params.categoryName;
         const result = await productModule.getPorductByCategory(categoryName);
         res.send(result);
-       
+
     } catch (e) {    //e its erorr
         res.status(404).send("Erorr : " + e);
     }
@@ -50,26 +50,37 @@ router.get('/:categoryName', async (req, res, next) => {
 //get products by product name
 router.get('/name/:productName', async (req, res, next) => {
     try {
-        debugger
         const productName = req.params.productName;
         const result = await productModule.getPorductByPorductName(productName);
         res.send(result);
-       
+
     } catch (e) {    //e its erorr
         res.status(404).send("Erorr : " + e);
     }
 });
 
 //get product by id
-// router.get('/', async (req, res, next) => {
-//     try {
-//         const id = req._id;
-//         const result = await productModule.getPorductById(id);
-//         res.send(result);
-//     } catch (e) {    //e its erorr
-//         res.status(404).send("Erorr : " + e);
-//     }
-// });
+router.get('/id/:id', async (req, res) => {
+    try {
+        const ID = req.params.id;
+        const result = await productModule.getPorductByID(ID);
+        res.send(result);
+
+    } catch (e) {    //e its erorr
+        res.status(404).send("Erorr : " + e);
+    }
+});
+
+//update product 
+router.put('/', async (req, res) => {
+    try {
+        const newProduct = req.body;
+        const result = await productModule.updateProduct(newProduct);
+        res.send(result);
+    } catch (e) {    //e its erorr
+        res.status(404).send("Erorr : " + e);
+    }
+});
 
 //add Category data
 router.get('/addCategory', async function (req, res, next) {
