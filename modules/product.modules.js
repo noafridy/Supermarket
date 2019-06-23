@@ -39,13 +39,16 @@ var productModel = {
         return res;
     },
     updateProduct: async function (newProduct) {
-        debugger
         let product = await ProductModel.findByIdAndUpdate({ _id: newProduct._id}, newProduct);
-        debugger;
         return product
-        // let product = await ProductModel.findById(newProduct._id);
-        // product.porductName = newProduct.porductName;
-        // return product.save();  
+    },
+    deleteProduct:async function(ID){
+        debugger
+        const product = await ProductModel.findByIdAndDelete(ID);
+        debugger;
+        return product.find();
+       
+       
     }
 
 

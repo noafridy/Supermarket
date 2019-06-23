@@ -82,6 +82,19 @@ router.put('/', async (req, res) => {
     }
 });
 
+//delete product
+router.delete('/:id', async (req, res) => {
+    try {
+        debugger
+        const ID = req.params.id;
+        const result = await productModule.deleteProduct(ID);
+        res.send(result);
+        debugger
+    } catch (e) {    //e its erorr
+        res.status(404).send("Erorr : " + e);
+    }
+})
+
 //add Category data
 router.get('/addCategory', async function (req, res, next) {
     let x1 = new CategoryModel({ categoryName: "Milk&Eggs" })

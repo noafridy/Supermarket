@@ -12,7 +12,9 @@ const bodyParser = require("body-parser");
 //  שלב1
 var userRoutes = require('./routes/userRoutes');
 var productRouts = require('./routes/productRoutes');
-
+var cartRouts = require('./routes/cartRoutes');
+var cartProductRouts = require('./routes/cartProductRoutes');
+var orderRouts = require('./routes/orderRouts');
 var app = express();
 mongoose.connect('mongodb://localhost:27017/supermarket', { useNewUrlParser: true }) //שלב2  חיבור לדאטהבייס //collections
 
@@ -35,5 +37,8 @@ app.use(passport.session());   //כדי שיוכל להשתמש
 
 app.use('/api/user', userRoutes);   //  שלב1
 app.use('/api/product' , productRouts);
+app.use('/api/cart' , cartRouts);
+app.use('/api/cartProduct' , cartProductRouts);
+app.use('/api/order' , orderRouts);
 
 module.exports = app;
