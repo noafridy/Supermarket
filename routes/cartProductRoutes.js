@@ -3,10 +3,21 @@ var router = express.Router();
 //שלב 4- יוצרת משתנה למודל כדי שאשתמש בו
 var CartProductModule = require('../modules/cartProduct.module');
 
-// add new cart product
+// add new or update cart product
 router.post('/', async (req, res) => {
     try {
-        let cartProduct = await CartProductModule.addNewCartPorduct(req.body);
+        const productId = req.body.product;
+        const cartId = req.body.ShoppingCart;
+        let cartProduct = '';
+
+        // check if that product already exists in that cart id
+        const cartproduct = await CartProductModule.checkCartProduct(cartId, productId);
+        if (cartproduct) {
+            cartProduct = await CartProductModule.updateCartProduct(req.body, cartproduct.id);
+        } else {
+            cartProduct = await CartProductModule.addNewCartPorduct(req.body);
+        }
+        
         res.json(cartProduct);
     } catch (e) {
         res.status(404).send("Erorr : " + e);
@@ -14,11 +25,11 @@ router.post('/', async (req, res) => {
 });
 
 // delete cart product
-router.delete('/:id', async (req, res) => {
+router.delete('/:productId', async (req, res) => {
     try {
-        const id = req.params.id;
-        let cartProduct = await CartProductModule.deleteCartProduct(id);
-        res.json(cartProduct);
+        const productId = req.params.productId;
+        await CartProductModule.deleteCartProduct(productId);
+        res.json({message: 'product removed from cart'}).status(200);
     } catch (e) {
         res.status(404).send("Erorr : " + e);
     }
@@ -27,7 +38,6 @@ router.delete('/:id', async (req, res) => {
 // update cart product
 router.put('/', async (req, res) => {
     try {
-        debugger
         const newProductCart = req.body;
         await CartProductModule.updateCartProduct(newProductCart);
         res.send("update");
@@ -39,7 +49,6 @@ router.put('/', async (req, res) => {
 // get all cart product by cart id
 router.get('/:cartId', async (req, res) => {
     try {
-        debugger;
         const cartId = req.params.cartId;
         const cartProducts = await CartProductModule.getAllCartProduct(cartId);
         res.send(cartProducts);

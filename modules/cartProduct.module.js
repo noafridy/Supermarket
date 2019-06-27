@@ -9,14 +9,18 @@ var cartProductModel = {
         await CartProductModel.findByIdAndDelete(id);
         return await CartProductModel.find();
     },
-    updateCartProduct: async function (newProductObj) {
-        let product = await CartProductModel.findByIdAndUpdate({_id:newProductObj._id},newProductObj);
+    updateCartProduct: async function (newProductObj, cartItemId) {
+        let product = await CartProductModel.findByIdAndUpdate({_id:cartItemId}, newProductObj);
         return product.save;
     },
     getAllCartProduct: async function (cartId) {
         const res = await CartProductModel.find({ShoppingCart: cartId}).populate({ path: 'product' }).exec().then(data => {
             return data;
         });
+        return res;
+    },
+    checkCartProduct: async function (cartId, productId) {
+        const res = await CartProductModel.findOne({ShoppingCart: cartId, product: productId});
         return res;
     }
 }

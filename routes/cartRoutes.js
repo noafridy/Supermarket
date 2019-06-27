@@ -19,7 +19,9 @@ router.get('/:userId', async (req, res, next) => {
                 CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
                 res.status(200).json({
                     message: 'found last order',
-                    lastOrder: userOrder
+                    lastOrder: userOrder,
+                    cart:[],
+                    cartId: LastShoppingcart.id
                 });
             } else {
                 // get all cart products connected to current open cart
@@ -27,7 +29,8 @@ router.get('/:userId', async (req, res, next) => {
                 // send open cart
                 res.status(200).json({
                     message: 'you have an open cart',
-                    cart: cartProducts
+                    cart: cartProducts,
+                    cartId: LastShoppingcart.id
                 });
             }
         }
@@ -39,7 +42,8 @@ router.get('/:userId', async (req, res, next) => {
             CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
             res.status(200).json({
                 message: 'welcome to your first shopping',
-                cart: {}
+                cart: [],
+                cartId: LastShoppingcart.id
             });
         } else {
             res.status(404).send("Erorr : " + e);
