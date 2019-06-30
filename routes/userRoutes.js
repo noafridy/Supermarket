@@ -40,6 +40,7 @@ router.post('/login', function (req, res, next) {  //function עוטפת
 // add new user
 router.post('/join', function (req, res, next) {  //function עוטפת
   try {
+    debugger
     passport.authenticate('local-signup', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
       if (err) { return next(err); }
       if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון

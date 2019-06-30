@@ -7,7 +7,7 @@ const Order = mongoose.model('Order', new Schema({
   totalCost: Number,
   city: String,
   street: String,
-  DD: String,     //Delivery date  //ask tal if we need to changed to date
+  DD: String,     //Delivery date 
   orderDate: String,
   creditCard: String   //Last 4 digits of credit card
 }))
