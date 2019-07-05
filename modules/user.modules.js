@@ -13,6 +13,10 @@ var userModule = {
        let user = await UserModel.findById(id);  //let becaouse i will change the role
        user.role = role;   //role => admin or user
        return user.save();
+    },
+     checkIfExistID: async function(ID) {
+        const user =  await UserModel.findOne({ID: ID});
+        return user;
     }
 
 }

@@ -14,8 +14,10 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
 router.post('/login', function (req, res, next) {  //function עוטפת
   try {
+    debugger
     passport.authenticate('local', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
       if (err) { return next(err); }
       if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
@@ -31,16 +33,37 @@ router.post('/login', function (req, res, next) {  //function עוטפת
           _id: req.user._id
         });
       });
-    })(req, res, next);
+    })
   } catch (e) {    //e its erorr
     res.status(404).send("Erorr : " + e);
   }
 });
 
+//check If ID Exist in the system
+router.get('/checkUser/:ID', async (req, res, next) => {
+  debugger
+  const ID = req.params.ID
+  try {
+    const result = await userModule.checkIfExistID(ID);
+    // await userModule.checkIfExistID(ID);
+    if (result) {
+      res.status(200).json(
+        { 
+          msg: 'The user exist in the system, please try login',
+          code: 404
+      });
+    } else {
+      res.status(200).json({msg:'OK', code: 200});
+    }
+  } catch (e) {    //e its erorr
+    res.status(200).json({msg:  'error',code: 404});
+  }
+});
+
 // add new user
 router.post('/join', function (req, res, next) {  //function עוטפת
+
   try {
-    debugger
     passport.authenticate('local-signup', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
       if (err) { return next(err); }
       if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
@@ -74,7 +97,7 @@ router.post('/logout', async (req, res, next) => {
 //update user role=admin
 router.put('/', async (req, res, next) => {
   try {
-    userModule.updateRole(req.body.id,req.body.role);
+    userModule.updateRole(req.body.id, req.body.role);
     return res.status(200).send({ message: 'success' });
   } catch (e) {    //e its erorr
     res.status(404).send("Erorr : " + e);

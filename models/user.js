@@ -17,7 +17,6 @@ var userSchema = new Schema({
 
 userSchema.methods.encryptPassword = function (password) {
     const encPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
-    debugger;
     return encPassword;
 };
 

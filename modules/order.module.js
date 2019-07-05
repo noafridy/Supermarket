@@ -1,5 +1,5 @@
 var OrderModel = require('../models/order');
-var CartProductModel = require('../models/cartProduct');
+// var CartProductModel = require('../models/cartProduct');
 var CartProductModule = require('./cartProduct.module');
 
 var orderModel = {
@@ -15,12 +15,9 @@ var orderModel = {
         const order =  await OrderModel.findOne({_id: orderId}).populate({ path: 'ShoppingCart' }).exec().then(data => {
             return data;
         });
-
         if (!order) {
             return [];
         }
-
-
         const products =  await CartProductModule.getAllCartProduct(order.ShoppingCart.id);
         return {order, products};
     },

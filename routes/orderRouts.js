@@ -4,7 +4,6 @@ var orderModule = require('../modules/order.module');
 
 // add new order
 router.post('/', async (req, res, next) => {
-    debugger;
     let currentDate = (new Date()).toISOString().substr(0, 10);
     let obj = { ...req.body };
     obj.orderDate = currentDate;
