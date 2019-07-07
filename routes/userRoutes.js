@@ -17,7 +17,6 @@ router.get('/', async (req, res, next) => {
 
 router.post('/login', function (req, res, next) {  //function עוטפת
   try {
-    debugger
     passport.authenticate('local', function (err, user, info) { //authenticate ברגע שמגיעה בקשת לןגין הוא הולך למידלור שהגדרתי
       if (err) { return next(err); }
       if (!user) { return res.status(200).send({ errorMessage: info.message }); }  //אם אין יוזר תשלח הודעה כגיסון
@@ -33,7 +32,7 @@ router.post('/login', function (req, res, next) {  //function עוטפת
           _id: req.user._id
         });
       });
-    })
+    })(req, res, next);
   } catch (e) {    //e its erorr
     res.status(404).send("Erorr : " + e);
   }
@@ -41,7 +40,6 @@ router.post('/login', function (req, res, next) {  //function עוטפת
 
 //check If ID Exist in the system
 router.get('/checkUser/:ID', async (req, res, next) => {
-  debugger
   const ID = req.params.ID
   try {
     const result = await userModule.checkIfExistID(ID);

@@ -1,5 +1,20 @@
 var express = require('express');
 var router = express.Router();
+const multer = require('multer'); // middleware for upload files
+
+
+// configure file upload
+// SET STORAGE
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage });
+
 //שלב 4- יוצרת משתנה למודל כדי שאשתמש בו
 var CategoryModel = require('../models/category');
 var productModule = require('../modules/product.modules');
@@ -25,8 +40,9 @@ router.get('/', async (req, res, next) => {
 });
 
 // add new product
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('myImage') , async (req, res, next) => {
     try {
+        debugger;
         let product = await productModule.addNewPorduct(req.body);
         res.json(product);
         // res.json({ data: user });
