@@ -74,7 +74,8 @@ router.post('/join', function (req, res, next) {  //function עוטפת
           lastName: req.user.lastName,
           role: req.user.role,
           street: req.user.street,
-          city: req.user.city
+          city: req.user.city,
+          _id: req.user._id
         });
       });
     })(req, res, next);

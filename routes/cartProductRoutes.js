@@ -36,15 +36,15 @@ router.delete('/:productId', async (req, res) => {
 });
 
 // update cart product
-router.put('/', async (req, res) => {
-    try {
-        const newProductCart = req.body;
-        await CartProductModule.updateCartProduct(newProductCart);
-        res.send("update");
-    } catch (e) {
-        res.status(404).send("Erorr : " + e);
-    }
-});
+// router.put('/', async (req, res) => {
+//     try {
+//         const newProductCart = req.body;
+//         await CartProductModule.updateCartProduct(newProductCart);
+//         res.send("update");
+//     } catch (e) {
+//         res.status(404).send("Erorr : " + e);
+//     }
+// });
 
 // get all cart product by cart id
 router.get('/:cartId', async (req, res) => {

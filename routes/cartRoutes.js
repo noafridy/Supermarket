@@ -20,6 +20,7 @@ router.get('/:userId', async (req, res, next) => {
                 res.status(200).json({
                     message: 'found last order',
                     lastOrder: userOrder,
+                    type: 'found_last_order',
                     cart:[],
                     cartId: LastShoppingcart.id
                 });
@@ -29,10 +30,20 @@ router.get('/:userId', async (req, res, next) => {
                 // send open cart
                 res.status(200).json({
                     message: 'you have an open cart',
+                    type: 'open_cart',
                     cart: cartProducts,
                     cartId: LastShoppingcart.id
                 });
             }
+        } else {
+            // user does not have a shopping cart
+            const newCart = await CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
+            res.status(200).json({
+                message: 'welcome to your first shopping experiance',
+                type: 'first_cart',
+                cart: [],
+                cartId: newCart.id
+            });
         }
         
         // todo return the actual shopping cart with all the products related to it
@@ -42,6 +53,7 @@ router.get('/:userId', async (req, res, next) => {
             CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
             res.status(200).json({
                 message: 'welcome to your first shopping',
+                type: 'first_cart',
                 cart: [],
                 cartId: LastShoppingcart.id
             });

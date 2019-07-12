@@ -14,7 +14,7 @@ var cartProductModel = {
         return product.save;
     },
     getAllCartProduct: async function (cartId) {
-        const res = await CartProductModel.find({ShoppingCart: cartId}).populate({ path: 'product' }).exec().then(data => {
+        const res = await CartProductModel.find({ShoppingCart: cartId}).populate('product').populate('ShoppingCart').exec().then(data => {
             return data;
         });
         return res;

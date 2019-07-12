@@ -29,7 +29,7 @@ router.get('/category', async (req, res, next) => {
     }
 });
 
-//get all productModule
+//get all products
 router.get('/', async (req, res, next) => {
     try {
         const result = await productModule.getAll();

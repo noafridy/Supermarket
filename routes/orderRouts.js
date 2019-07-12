@@ -37,6 +37,12 @@ router.get('/recipt/:orderId', async (req, res, next) => {
 
     res.set({"Content-Disposition":"attachment; filename=receipt"});
     res.send(str);
+});
+
+router.get('/getAll', async (req, res, next) => {
+    const orders = await orderModule.getAllOrders();
+   
+    res.send(orders);
 })
 
 module.exports = router;

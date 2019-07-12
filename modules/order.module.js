@@ -11,6 +11,10 @@ var orderModel = {
         const order =  await OrderModel.findOne({user: userId, ShoppingCart: cartId});
         return order;
     },
+    getAllOrders: async function() {
+        const orders =  await OrderModel.find();
+        return orders;
+    },
     getProductsByOrderId: async function(orderId) {
         const order =  await OrderModel.findOne({_id: orderId}).populate({ path: 'ShoppingCart' }).exec().then(data => {
             return data;

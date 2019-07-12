@@ -22,7 +22,6 @@ userSchema.methods.encryptPassword = function (password) {
 
 userSchema.methods.validPassword = function (password) {
     const  validPassword = bcrypt.compareSync(password, this.password);
-    debugger;
     return validPassword;
 }
 

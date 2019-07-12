@@ -40,6 +40,6 @@ app.use('/api/product', productRouts);
 app.use('/api/cart', cartRouts);
 app.use('/api/cartProduct', cartProductRouts);
 app.use('/api/order', orderRouts);
-app.use('/api/assets', express.static('uploads')); // route foe serving server asset files
+app.use('/api/assets', express.static('uploads')); // route for serving server asset files
 
 module.exports = app;
