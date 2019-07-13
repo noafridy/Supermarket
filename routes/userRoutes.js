@@ -86,7 +86,9 @@ router.post('/join', function (req, res, next) {  //function עוטפת
 
 router.post('/logout', async (req, res, next) => {
   try {
-    res.cookie('userInfo', null, { maxAge: 900000, httpOnly: true });  //מכניסים לקוקי את האנפרומציה של היוזר
+    res.cookie('userInfo', null, { maxAge: 900000, httpOnly: true });
+    req.session.destroy();
+    req.logout();
     return res.status(200).send({ message: 'success' });
   } catch (e) {    //e its erorr
     res.status(404).send("Erorr : " + e);

@@ -9,6 +9,9 @@ var cartProductModel = {
         await CartProductModel.findByIdAndDelete(id);
         return await CartProductModel.find();
     },
+    deleteAllCartProducts: async function (shoppingId) {
+        await CartProductModel.deleteMany({ShoppingCart: shoppingId});
+    },
     updateCartProduct: async function (newProductObj, cartItemId) {
         let product = await CartProductModel.findByIdAndUpdate({_id:cartItemId}, newProductObj);
         return product.save;

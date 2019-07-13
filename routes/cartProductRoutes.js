@@ -35,6 +35,17 @@ router.delete('/:productId', async (req, res) => {
     }
 });
 
+// delete cart product
+router.delete('/all/:shoppingCartId', async (req, res) => {
+    try {
+        const shoppingCartId = req.params.shoppingCartId;
+        await CartProductModule.deleteAllCartProducts(shoppingCartId);
+        res.json({message: 'deleted all products from cart'}).status(200);
+    } catch (e) {
+        res.status(404).send("Erorr : " + e);
+    }
+});
+
 // update cart product
 // router.put('/', async (req, res) => {
 //     try {

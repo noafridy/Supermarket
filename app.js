@@ -15,6 +15,15 @@ var cartRouts = require('./routes/cartRoutes');
 var cartProductRouts = require('./routes/cartProductRoutes');
 var orderRouts = require('./routes/orderRouts');
 var app = express();
+
+var checkUser = function(req, res, next) {
+    if (req.session.passport && req.session.passport.user) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
 mongoose.connect('mongodb://localhost:27017/supermarket', { useNewUrlParser: true }) //שלב2  חיבור לדאטהבייס //collections
 
 
@@ -36,10 +45,10 @@ app.use(passport.initialize());  //איתחול פספורט
 app.use(passport.session());   //כדי שיוכל להשתמש
 
 app.use('/api/user', userRoutes);   //  שלב1
-app.use('/api/product', productRouts);
-app.use('/api/cart', cartRouts);
-app.use('/api/cartProduct', cartProductRouts);
-app.use('/api/order', orderRouts);
+app.use('/api/product', checkUser, productRouts);
+app.use('/api/cart', checkUser, cartRouts);
+app.use('/api/cartProduct', checkUser, cartProductRouts);
+app.use('/api/order', checkUser, orderRouts);
 app.use('/api/assets', express.static('uploads')); // route for serving server asset files
 
 module.exports = app;

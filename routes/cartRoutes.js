@@ -16,13 +16,13 @@ router.get('/:userId', async (req, res, next) => {
         if (LastShoppingcart) {
             const userOrder = await OrderModel.getUserOrders(user, LastShoppingcart.id);
             if (userOrder) {
-                CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
+                const newCart = await CartModule.addNewShoppingCart({user, date}); // create a new cart for the user
                 res.status(200).json({
                     message: 'found last order',
                     lastOrder: userOrder,
                     type: 'found_last_order',
                     cart:[],
-                    cartId: LastShoppingcart.id
+                    cartId: newCart.id
                 });
             } else {
                 // get all cart products connected to current open cart
